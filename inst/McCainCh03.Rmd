@@ -12,6 +12,10 @@ Calculate the aparent molecular weight of air given the components and mole frac
 
 ```{r}
 load(file = "../data/mc-ch3.rda")
+names(ex35)
+ex34["Ma"] <- ex34["mole_fraction"] * ex34["molecular_weight"]
+M.a <- sum(ex34["Ma"])
+print(M.a)
 ```
 
 
@@ -24,10 +28,11 @@ Calculate the specific gravity of a gas of the following composition:
 load(file = "../data/mc-ch3.rda")
 ```
 
-### Calculate the aparent molecular weight
+
 
 ![](./images/eq_3-35_MC103.jpg)
 
+### Calculate the aparent molecular weight
 
 Using equation 3-35.
 
