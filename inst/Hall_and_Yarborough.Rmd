@@ -219,17 +219,17 @@ z.hallyarboroughL <- function(pres.a, temp.f, gas.sg, pres.pc, temp.pc,
 }
 
 # supplying gas.sg
-with_gas.sg <- c(what = "use_gas.sg", z.hallyarboroughL(pres.a = 1000, temp.f = 100, gas.sg = 0.82))
+with_gas.sg <- c(method = "use_gas.sg", z.hallyarboroughL(pres.a = 1000, temp.f = 100, gas.sg = 0.82))
 # z = 0.760227
 # pres.pc = 662
 # temp.pc = 427.024
 
 # no gas.sg provided
-with_pseudo_crit <- c(what = "use_pseudo_critical", z.hallyarboroughL(pres.a = 1000, temp.f = 100,  pres.pc = 662, temp.pc = 427))
+with_pseudo_crit <- c(method = "use_pseudo_critical", z.hallyarboroughL(pres.a = 1000, temp.f = 100,  pres.pc = 662, temp.pc = 427))
 names(with_pseudo_crit)
 
 # no gas.sg provided
-with_pseudo_red <- c(what = "use_pseudo_reduced", z.hallyarboroughL(pres.a = 1000, temp.f = 100,  pres.pr = 1.51, temp.pr = 1.31))
+with_pseudo_red <- c(method = "use_pseudo_reduced", z.hallyarboroughL(pres.a = 1000, temp.f = 100,  pres.pr = 1.51, temp.pr = 1.31))
 names(with_pseudo_red)
 
 df <- data.frame(stringsAsFactors = FALSE)
