@@ -15,12 +15,21 @@ z.hallyarboroughL <- function(pres.a, temp.f, gas.sg, pres.pc, temp.pc,
         cat("No gas.sg supplied. ")
         if (missing(pres.pc) || missing(temp.pc)) {
             if (missing(pres.pr) || missing(temp.pr)) stop()
-            # providing pres.pr and temp.pr
-            cat("Using instead pres.pr and temp.pr \n")
-            temp.r <- 1 / temp.pr
-            # calculate pseudo-reduced
-            pres.pc <- pres.a / pres.pr
-            temp.pc <- (temp.f + 460) / temp.pr  # worksheet has bug in the Farenheit add
+            if (missing(pres.a) || missing(temp.f)) {
+                # user ONLY supplies pseudo-reduced P, T
+                cat("Using ONLY pres.pr and temp.pr to calculate z \n")
+                temp.r  <- 1 / temp.pr
+                pres.pc <- NA
+                temp.pc <- NA
+            } else {
+                # providing pres.pr and temp.pr
+                cat("Using instead pres.pr and temp.pr \n")
+                temp.r <- 1 / temp.pr
+                # calculate pseudo-criticals
+                pres.pc <- pres.a / pres.pr
+                temp.pc <- (temp.f + 460) / temp.pr
+                # Guo's worksheet has bug in the Farenheit add
+            }
         } else {
             if (missing(pres.pc) || missing(temp.pc)) stop()
             cat("Using instead Ppc and Tpc \n")
@@ -30,6 +39,7 @@ z.hallyarboroughL <- function(pres.a, temp.f, gas.sg, pres.pc, temp.pc,
             temp.r  <- crit$temp.r
         }
     } else {
+        # the standard calculation when specific gravity of the gas is provided
         cat("gas.sg has been provided. Will calculate Ppc, Tpc, Ppr, Tpr \n")
         crit <- calcCriticals(pres.a, temp.f, gas.sg,
                               co2.frac = 0, h2s.frac = 0, n2.frac = 0)
