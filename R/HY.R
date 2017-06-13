@@ -16,13 +16,13 @@ z.hallyarboroughL <- function(pres.a, temp.f, gas.sg, pres.pc, temp.pc,
         if (missing(pres.pc) || missing(temp.pc)) {
             if (missing(pres.pr) || missing(temp.pr)) stop()
             if (missing(pres.a) || missing(temp.f)) {
-                # user ONLY supplies pseudo-reduced P, T
+                #: user ONLY supplies pseudo-reduced P, T
                 cat("Using ONLY pres.pr and temp.pr to calculate z \n")
                 temp.r  <- 1 / temp.pr
                 pres.pc <- NA
                 temp.pc <- NA
             } else {
-                # providing pres.pr and temp.pr
+                #: providing pres.a, temp.f, pres.pr, temp.pr
                 cat("Using instead pres.pr and temp.pr \n")
                 temp.r <- 1 / temp.pr
                 # calculate pseudo-criticals
@@ -39,7 +39,7 @@ z.hallyarboroughL <- function(pres.a, temp.f, gas.sg, pres.pc, temp.pc,
             temp.r  <- crit$temp.r
         }
     } else {
-        # the standard calculation when specific gravity of the gas is provided
+        #: the standard calculation when specific gravity of the gas is provided
         cat("gas.sg has been provided. Will calculate Ppc, Tpc, Ppr, Tpr \n")
         crit <- calcCriticals(pres.a, temp.f, gas.sg,
                               co2.frac = 0, h2s.frac = 0, n2.frac = 0)
@@ -49,35 +49,30 @@ z.hallyarboroughL <- function(pres.a, temp.f, gas.sg, pres.pc, temp.pc,
         pres.pc <- crit$pres.pc
         temp.pc <- crit$temp.pc
     }
-    # return(res)
-    # pres.a = absolute pressure, psia
-    # temp.f  = temperature, deg F
-
-    # calculate pseudo-critical pressure and temperature
-    # get pseudo-reduced
-    # crit <- calcCriticals(pres.a, temp.f, gas.sg, co2.frac, h2s.frac, n2.frac, ...)
-
-
+    #: calculate reduced temperature
     t <- temp.r   # make it easier to read in the equation below
-
+    #: calculate constants given pseudo-reduced temperature
+    #: formulas have been checked against five sources: papers and books
     A <- 0.06125 * t * exp(-1.2 * (1 - t)^2)
     B <- t * (14.76 - 9.76 * t + 4.58 * t^2)
     C <- t * (90.7 - 242.2 * t + 42.4 * t^2)
     D <- 2.18 + 2.82 * t
 
-    All <- rootSolve::uniroot.all(funcY, c(-5.01, 5.99)) # find the root of the equation
-    Y <- min(All)                         # minimum value
+    All <- rootSolve::uniroot.all(funcY, c(-5.01, 5.99)) # find the root
+    Y <- min(All)                         # take the minimum value
     z <- A * pres.pr / Y                  # calculate z
+    #: prepare for table
     zfactors <- named.list(z, Y, A, B, C, D,
                            pres.pr, temp.pr, pres.pc, temp.pc, temp.r)
     return(zfactors)
 }
 
+
 calcCriticals <- function(pres.a, temp.f, gas.sg,
                           co2.frac = 0, h2s.frac = 0, n2.frac = 0,
                           correction = "")
 {
-    # pseudocritical temperatures in Ranine
+    # pseudocritical temperatures in Rankine
 
     if (correction == "Brown") {
         brown <- calcGasCriticals.Brown(pres.a, temp.f, gas.sg,
@@ -94,9 +89,9 @@ calcCriticals <- function(pres.a, temp.f, gas.sg,
             pres.pc <- 709.604 - 58.718 * gas.sg      # Eq 2.22
             temp.pc <- 170.491 + 307.344 * gas.sg     # Eq 2.23
         } else {
-            # print("Guo 2/23")
-            # Pseudo-criticals for impurity corrections
-            # Ahmed, Guo pg 2/23
+            #: Pseudo-criticals for impurity corrections in mixtures
+            #: Ahmed equations 2-29, 2-30, Guo book pg 2/23
+            #: Fatoorechi paper DOI 10.1002 cjce.22054
             pres.pc <- 678 - 50 * (gas.sg - 0.5) - 206.7 * n2.frac +
                 440 * co2.frac + 606.7 * h2s.frac
             temp.pc <- 326 + 315.7 * (gas.sg - 0.5) - 240 * n2.frac -

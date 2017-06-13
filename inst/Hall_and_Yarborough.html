@@ -330,23 +330,25 @@ with_pseudo_red &lt;- c(method = &quot;use_pseudo_reduced&quot;,
                      z.hallyarboroughL(pres.a = 1000, temp.f = 100,  
                                        pres.pr = 1.51, temp.pr = 1.31))
 
-df &lt;- data.frame(stringsAsFactors = FALSE)
-df &lt;- rbind(df, with_gas.sg, with_pseudo_crit, with_pseudo_red)</code></pre>
-<pre><code>gas.sg has been provided. Will calculate Ppc, Tpc, Ppr, Tpr 
-No gas.sg supplied. Using Ppc and Tpc 
-No gas.sg supplied. Using pres.pr and temp.pr </code></pre>
-<pre class="r"><code>fMulti &lt;- function(a, b, c, d) {
-    if (missing(d)) {
-        d &lt;- 1
-        e &lt;- a * b *c
-        print(match.call())
-    }
-    return(e)
-}
+only_pseudo_red &lt;- c(method = &quot;only_pseudo_reduced&quot;, 
+                     z.hallyarboroughL(pres.pr = 1.51, temp.pr = 1.31))
 
-fMulti(1,2,3)</code></pre>
-<pre><code>fMulti(a = 1, b = 2, c = 3)</code></pre>
-<pre><code>[1] 6</code></pre>
+# put the results in a dataframe
+df &lt;- data.frame(stringsAsFactors = FALSE)
+df &lt;- rbind(df, with_gas.sg, with_pseudo_crit, with_pseudo_red, only_pseudo_red)</code></pre>
+<pre><code>gas.sg has been provided. Will calculate Ppc, Tpc, Ppr, Tpr 
+No gas.sg supplied. Using instead Ppc and Tpc 
+No gas.sg supplied. Using instead pres.pr and temp.pr 
+No gas.sg supplied. Using ONLY pres.pr and temp.pr to calculate z </code></pre>
+<p><br />
+<br />
+</p>
+<div id="calculate-z-for-various-values-of-p_pr-and-t_pr" class="section level3">
+<h3>Calculate <code>z</code> for various values of <span class="math inline">\(P_{pr}\)</span> and <span class="math inline">\(T_{pr}\)</span></h3>
+</div>
+</div>
+<div id="limits-of-hall-yarborough-correlation" class="section level2">
+<h2>Limits of Hall-Yarborough correlation</h2>
 </div>
 
 
