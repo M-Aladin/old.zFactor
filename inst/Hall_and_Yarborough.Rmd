@@ -205,14 +205,21 @@ with_pseudo_red <- c(method = "use_pseudo_reduced",
                      z.hallyarboroughL(pres.a = 1000, temp.f = 100,  
                                        pres.pr = 1.51, temp.pr = 1.31))
 
+only_pseudo_red <- c(method = "only_pseudo_reduced", 
+                     z.hallyarboroughL(pres.pr = 1.51, temp.pr = 1.31))
+
 # put the results in a dataframe
 df <- data.frame(stringsAsFactors = FALSE)
-df <- rbind(df, with_gas.sg, with_pseudo_crit, with_pseudo_red)
+df <- rbind(df, with_gas.sg, with_pseudo_crit, with_pseudo_red, only_pseudo_red)
 ```
+\
+\
+
+
+### Calculate `z` for various values of $P_{pr}$ and $T_{pr}$
 
 
 
 
 
-
-
+## Limits of Hall-Yarborough correlation
