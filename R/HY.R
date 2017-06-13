@@ -12,25 +12,25 @@ z.hallyarboroughL <- function(pres.a, temp.f, gas.sg, pres.pc, temp.pc,
     }
 
     if (missing(gas.sg)) {
-        print("No gas.sg supplied.")
+        cat("No gas.sg supplied. ")
         if (missing(pres.pc) || missing(temp.pc)) {
             if (missing(pres.pr) || missing(temp.pr)) stop()
             # providing pres.pr and temp.pr
-            print("using pres.pr and temp.pr")
+            cat("Using instead pres.pr and temp.pr \n")
             temp.r <- 1 / temp.pr
             # calculate pseudo-reduced
             pres.pc <- pres.a / pres.pr
             temp.pc <- (temp.f + 460) / temp.pr  # worksheet has bug in the Farenheit add
         } else {
             if (missing(pres.pc) || missing(temp.pc)) stop()
-            print("Using Ppc and Tpc")
+            cat("Using instead Ppc and Tpc \n")
             crit <- calcGasPseudoReduced(pres.a, pres.pc, temp.f, temp.pc)
             pres.pr <- crit$pres.pr
             temp.pr <- crit$temp.pr
             temp.r  <- crit$temp.r
         }
     } else {
-        print("gas.sg has been provided")
+        cat("gas.sg has been provided. Will calculate Ppc, Tpc, Ppr, Tpr \n")
         crit <- calcCriticals(pres.a, temp.f, gas.sg,
                               co2.frac = 0, h2s.frac = 0, n2.frac = 0)
         pres.pr <- crit$pres.pr
