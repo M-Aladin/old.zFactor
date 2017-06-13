@@ -1,7 +1,7 @@
 Package: zFactor
 Type: Package
 Title: Calculate the compressibility factor, Z
-Version: 0.0.0.9001
+Version: 0.0.0.9002
 Author: Alfonso R. Reyes <alfonso.reyes@oilgainsanalytics.com>
 Maintainer: Alfonso R. Reyes <alfonso.reyes@oilgainsanalytics.com>
 Description: More about what it does (maybe more than one line)
