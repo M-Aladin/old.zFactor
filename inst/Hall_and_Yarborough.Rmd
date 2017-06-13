@@ -216,18 +216,3 @@ df <- rbind(df, with_gas.sg, with_pseudo_crit, with_pseudo_red)
 
 
 
-```{r}
-fMulti <- function(a, b, c, d) {
-    if (missing(d)) {
-        d <- 1
-        e <- a * b *c
-        print(match.call())
-    }
-    return(e)
-}
-
-fMulti(1,2,3)
-```
-
-
-
