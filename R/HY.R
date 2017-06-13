@@ -2,7 +2,8 @@
 # pres.pc, temp.pc, pres.pr, temp.pr
 z.hallyarboroughL <- function(pres.a, temp.f, gas.sg, pres.pc, temp.pc,
                               pres.pr, temp.pr,
-                              n2.frac = 0, co2.frac = 0, h2s.frac = 0, ...)
+                              n2.frac = 0, co2.frac = 0, h2s.frac = 0,
+                              verbose = FALSE, ...)
 {
     funcY <- function(y) {
         # implicit equation
@@ -12,18 +13,18 @@ z.hallyarboroughL <- function(pres.a, temp.f, gas.sg, pres.pc, temp.pc,
     }
 
     if (missing(gas.sg)) {
-        cat("No gas.sg supplied. ")
+        if (verbose) cat("No gas.sg supplied. ")
         if (missing(pres.pc) || missing(temp.pc)) {
             if (missing(pres.pr) || missing(temp.pr)) stop()
             if (missing(pres.a) || missing(temp.f)) {
                 #: user ONLY supplies pseudo-reduced P, T
-                cat("Using ONLY pres.pr and temp.pr to calculate z \n")
+                if (verbose) cat("Using ONLY pres.pr and temp.pr to calculate z \n")
                 temp.r  <- 1 / temp.pr
                 pres.pc <- NA
                 temp.pc <- NA
             } else {
                 #: providing pres.a, temp.f, pres.pr, temp.pr
-                cat("Using instead pres.pr and temp.pr \n")
+                if (verbose) cat("Using instead pres.pr and temp.pr \n")
                 temp.r <- 1 / temp.pr
                 # calculate pseudo-criticals
                 pres.pc <- pres.a / pres.pr
@@ -32,7 +33,7 @@ z.hallyarboroughL <- function(pres.a, temp.f, gas.sg, pres.pc, temp.pc,
             }
         } else {
             if (missing(pres.pc) || missing(temp.pc)) stop()
-            cat("Using instead Ppc and Tpc \n")
+            if (verbose)cat("Using instead Ppc and Tpc \n")
             crit <- calcGasPseudoReduced(pres.a, pres.pc, temp.f, temp.pc)
             pres.pr <- crit$pres.pr
             temp.pr <- crit$temp.pr
@@ -40,7 +41,7 @@ z.hallyarboroughL <- function(pres.a, temp.f, gas.sg, pres.pc, temp.pc,
         }
     } else {
         #: the standard calculation when specific gravity of the gas is provided
-        cat("gas.sg has been provided. Will calculate Ppc, Tpc, Ppr, Tpr \n")
+        if (verbose) cat("gas.sg has been provided. Will calculate Ppc, Tpc, Ppr, Tpr \n")
         crit <- calcCriticals(pres.a, temp.f, gas.sg,
                               co2.frac = 0, h2s.frac = 0, n2.frac = 0)
         pres.pr <- crit$pres.pr
@@ -58,7 +59,7 @@ z.hallyarboroughL <- function(pres.a, temp.f, gas.sg, pres.pc, temp.pc,
     C <- t * (90.7 - 242.2 * t + 42.4 * t^2)
     D <- 2.18 + 2.82 * t
 
-    All <- rootSolve::uniroot.all(funcY, c(-5.01, 5.99)) # find the root
+    All <- rootSolve::uniroot.all(funcY, c(-0.01, 10.99)) # find the root
     Y <- min(All)                         # take the minimum value
     z <- A * pres.pr / Y                  # calculate z
     #: prepare for table
