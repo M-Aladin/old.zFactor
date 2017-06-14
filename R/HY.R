@@ -3,6 +3,7 @@
 z.hallyarboroughL <- function(pres.a, temp.f, gas.sg, pres.pc, temp.pc,
                               pres.pr, temp.pr,
                               n2.frac = 0, co2.frac = 0, h2s.frac = 0,
+                              interval = c(-1.01, 1.99),
                               verbose = FALSE, ...)
 {
     funcY <- function(y) {
@@ -59,7 +60,8 @@ z.hallyarboroughL <- function(pres.a, temp.f, gas.sg, pres.pc, temp.pc,
     C <- t * (90.7 - 242.2 * t + 42.4 * t^2)
     D <- 2.18 + 2.82 * t
 
-    All <- rootSolve::uniroot.all(funcY, c(-0.01, 10.99)) # find the root
+
+    All <- rootSolve::uniroot.all(funcY, interval) # find the root
     Y <- min(All)                         # take the minimum value
     z <- A * pres.pr / Y                  # calculate z
     #: prepare for table
