@@ -8,8 +8,9 @@ output: html_notebook
 ```{r}
 # Find the z factor using Hall-Yarborough correlation
 # This procedure follows Tarek Ahmed method. Pag 156 of his book
-pres.pr <- 5.5
-t <- temp.pr <- 1.3
+pres.pr <- 0.5
+temp.pr <- 1.3    # pseudo-reduce temperature
+t <- 1 / temp.pr  # reciprocal
 
 yk0 <- 0.0125 * pres.pr * t * exp(-1.2 * (1 - t)^2)
 
