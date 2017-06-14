@@ -67,9 +67,9 @@ cat("\n")
 ```{r}
 
 tol <- 0.0000001
+tol <- 1E-13
 
 f <- function(y) {
-    # print(pres.pr)
     - A * pres.pr + (y + y^2 + y^3 - y^4) / (1 - y)^3  - B * y^2 + C * y^D    
 }
 
@@ -77,13 +77,14 @@ fdot <- function(y) {
     (1 + 4 * y + 4 * y^2 - 4 * y^3 + y^4 ) / (1 - y)^4 - 2 * B * y + C * D * y^(D-1)
 }
 
-pres.pr <- .5
-t <- temp.pr <- 1.3
+pres.pr <- 6.5
+temp.pr <- 1.3
+
+t <- 1 / temp.pr
 yk <- 0.0125 * pres.pr * t * exp(-1.2 * (1 - t)^2)
 delta <- 1
 i <- 1
 while (delta >= tol) {
-    # print(yk)
     
     A <- 0.06125 * t * exp(-1.2 * (1 - t)^2)
     B <- t * (14.76 - 9.76 * t + 4.58 * t^2)
@@ -91,12 +92,10 @@ while (delta >= tol) {
     D <- 2.18 + 2.82 * t
     
     fyk <- f(yk)
-    cat(yk, fyk, abs(fyk))
     if (abs(fyk) < tol) break
     
     yk1 <- yk - f(yk) / fdot(yk)
     delta <- abs(yk - yk1)
-    # cat(yk, fyk, yk1, delta, "\n")
     cat(sprintf("%3d %10f %10f %10f \n", i, delta, yk, fyk))
     yk <- yk1
     i <- i + 1
@@ -107,3 +106,13 @@ cat("\n")
  print(z)
 ```
 
+## Values from Standing and Katz chart
+
+
+    (0.5, 1.3) = 0.92
+    (1.5, 1.3) = 0.76
+    (2.5, 1.3) = 0.64
+    (3.5, 1.3) = 0.63
+    (4.5, 1.3) = 0.68
+    (5.5, 1.3) = 0.76
+    (6.5, 1.3) = 0.84
